@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if (s.length() < p.length()) return result;
+
+        int[] pCount = new int[26];
+        int[] sCount = new int[26];
+
+        // Populate frequency count for pattern p
+        for (char c : p.toCharArray()) {
+            pCount[c - 'a']++;
+        }
+
+        int pLen = p.length();
+        for (int i = 0; i < s.length(); i++) {
+            // Add character to current window
+            sCount[s.charAt(i) - 'a']++;
+
+            // Remove character outside window
+            if (i >= pLen) {
+                sCount[s.charAt(i - pLen) - 'a']--;
+            }
+
+            // Compare maps
+            if (matches(pCount, sCount)) {
+                result.add(i - pLen + 1);
+            }
+        }
+        return result;
+    }
+
+    private boolean matches(int[] a, int[] b) {
+        for (int i = 0; i < 26; i++) {
+            if (a[i] != b[i]) return false;
+        }
+        return true;
+    }
+}
