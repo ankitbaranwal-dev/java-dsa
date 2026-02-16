@@ -1,41 +1,25 @@
-import java.util.ArrayList;
-import java.util.List;
-
+//understood code and wrote by own
 public class Solution {
     public List<Integer> findAnagrams(String s, String p) {
-        List<Integer> result = new ArrayList<>();
-        if (s.length() < p.length()) return result;
+        int np=p.length();
+        int ns=s.length();
+        List<Integer> res = new ArrayList<>();
+        if(ns<np) return res;
+        int[] pcount= new int[26];
+        int[] scount= new int[26];
+        for(char c: p.toCharArray()) pcount[c-'a']++;
+        for(char c: s.substring(0,np).toCharArray()) scount[c-'a']++;
 
-        int[] pCount = new int[26];
-        int[] sCount = new int[26];
+        if(Arrays.equals(pcount, scount))
+            res.add(0);
 
-        // Populate frequency count for pattern p
-        for (char c : p.toCharArray()) {
-            pCount[c - 'a']++;
+        for(int i=1; i<ns-np+1; i++)
+        {
+            scount[s.charAt(i-1)-'a']--;
+            scount[s.charAt(i+np-1)-'a']++;
+            if(Arrays.equals(pcount, scount))
+                res.add(i);
         }
-
-        int pLen = p.length();
-        for (int i = 0; i < s.length(); i++) {
-            // Add character to current window
-            sCount[s.charAt(i) - 'a']++;
-
-            // Remove character outside window
-            if (i >= pLen) {
-                sCount[s.charAt(i - pLen) - 'a']--;
-            }
-
-            // Compare maps
-            if (matches(pCount, sCount)) {
-                result.add(i - pLen + 1);
-            }
-        }
-        return result;
-    }
-
-    private boolean matches(int[] a, int[] b) {
-        for (int i = 0; i < 26; i++) {
-            if (a[i] != b[i]) return false;
-        }
-        return true;
+        return res;
     }
 }
