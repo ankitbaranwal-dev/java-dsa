@@ -1,4 +1,4 @@
-//understood code and wrote by own
+//understood code and wrote by owN
 public class Solution {
     public List<Integer> findAnagrams(String s, String p) {
         int np=p.length();
